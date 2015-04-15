@@ -212,12 +212,19 @@ public class Create implements Action
 
    private void makeExec(String path) throws IOException
    {
-      File file = new File(directory, path);
-      Files.setPosixFilePermissions(file.toPath(), new HashSet<PosixFilePermission>(Arrays.asList(
-         OWNER_READ, OWNER_WRITE, OWNER_EXECUTE,
-         GROUP_READ, GROUP_WRITE, GROUP_EXECUTE,
-         OTHERS_READ, OTHERS_EXECUTE
-      )));
+      try
+      {
+         File file = new File(directory, path);
+         Files.setPosixFilePermissions(file.toPath(), new HashSet<PosixFilePermission>(Arrays.asList(
+            OWNER_READ, OWNER_WRITE, OWNER_EXECUTE,
+            GROUP_READ, GROUP_WRITE, GROUP_EXECUTE,
+            OTHERS_READ, OTHERS_EXECUTE
+         )));
+      }
+      catch (Throwable ignore)
+      {
+         // Our best effort was not good enough :)
+      }
    }
 
    String path(String value, boolean unixPaths) throws IOException
